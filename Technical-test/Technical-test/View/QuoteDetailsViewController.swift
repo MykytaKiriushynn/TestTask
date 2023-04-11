@@ -10,6 +10,8 @@ import UIKit
 class QuoteDetailsViewController: UIViewController {
     
     private var quote:Quote? = nil
+    private var dataManager: DataManager = DataManager()
+    private var favouriteQuotes: [Quote] = []
     
     let symbolLabel = UILabel()
     let nameLabel = UILabel()
@@ -17,9 +19,6 @@ class QuoteDetailsViewController: UIViewController {
     let currencyLabel = UILabel()
     let readableLastChangePercentLabel = UILabel()
     let favoriteButton = UIButton()
-    
-    
-    
     
     init(quote:Quote) {
         super.init(nibName: nil, bundle: nil)
@@ -40,7 +39,7 @@ class QuoteDetailsViewController: UIViewController {
         nameLabel.text = quote?.name
         lastLabel.text = quote?.last
         currencyLabel.text = quote?.currency
-        readableLastChangePercentLabel.text = quote?.readableLastChangePercent
+        readableLastChangePercentLabel.text = quote?.formattedLastChangePercent
         
     }
     
@@ -129,6 +128,9 @@ class QuoteDetailsViewController: UIViewController {
     
     
     @objc func didPressFavoriteButton(_ sender:UIButton!) {
-        // TODO
+        guard let quote = self.quote else { return }
+        favouriteQuotes = dataManager.loadFavoriteQuotes()
+        favouriteQuotes.append(quote)
+        dataManager.saveFavoriteQuotes(favouriteQuotes)
     }
 }
